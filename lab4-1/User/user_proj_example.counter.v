@@ -81,8 +81,8 @@ module user_proj_example #(
     wire valid;
     reg ready;
     wire next_ready;
-    wire [BITS-1:0] data_in;
-    wire [BITS-1:0] data_out;
+    wire [BITS-1:0] wdata;
+    wire [BITS-1:0] rdata;
     wire [BITS-1:0] address;
     wire address_tmp;
     reg [3:0] delay;
@@ -98,8 +98,8 @@ module user_proj_example #(
     assign valid = address_tmp & wbs_stb_i & wbs_cyc_i;
     assign wbs_ack_o = ready;
     assign address = wbs_adr_i;
-    assign data_in = wbs_dat_i;
-    assign wbs_dat_o = data_out;
+    assign wdata = wbs_dat_i;
+    assign wbs_dat_o = rdata;
 
     assign next_ready = (delay == DELAYS-1)? 1'b1 : 1'b0;
     assign next_delay = (delay == DELAYS-1)? 4'd0 : delay + 1;
@@ -123,8 +123,8 @@ module user_proj_example #(
         .CLK(clk),
         .WE0(w_en),
         .EN0(valid),
-        .Di0(data_in),
-        .Do0(data_out),
+        .Di0(wdata),
+        .Do0(rdata),
         .A0(address)
     );
 
